@@ -40,6 +40,19 @@ class Happylth:
 			tagName = self.__make_tag_name(key)
 		self.__param[key] = soup.find('input', attrs={'name': tagName})['value']
 
+	def __get_home(self):
+		try:
+			res = self.session.get(self.happylth_root_url + self.company_path + '/home')
+			if res.status_code != 200:
+				raise
+		except:
+			raise Exception('Requests Error: Failed get home')
+		try:
+			soup = BeautifulSoup(res.text, 'html.parser')
+			self.__param['point'] = int(soup.find('a', attrs={'href': f"{self.company_path}/point"}).text.strip().replace('ポイント','').replace(',',''))
+		except:
+			raise Exception('BeautifulSoup Error')
+
 	def __get_inputrecord(self):
 		try:
 			res = self.session.get(self.happylth_root_url + self.company_path + '/inputrecord')
@@ -49,7 +62,7 @@ class Happylth:
 			raise Exception('Requests Error: Failed get inputrecord')
 
 		try:
-			soup = BeautifulSoup(res.text)
+			soup = BeautifulSoup(res.text, 'html.parser')
 			self.__param['url'] = soup.find('form')['action']
 			self.__set_dict(soup, 'formDate')
 			self.__set_dict(soup, 'sysDate')
@@ -113,6 +126,10 @@ class Happylth:
 				raise
 		except:
 			raise Exception('Requests Error: Failed login')
+		
+	def get_point(self):
+		self.__get_home()
+		return self.__param['point']
 
 	def generate_inputrecord_payload(self):
 		self.__get_inputrecord()
