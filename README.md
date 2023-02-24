@@ -18,7 +18,7 @@ pip install beautifulsoup4
 from happylth import Happylth
 hap = Happylth(user=<ユーザーID>, password=<パスワード>, company_path=<会社ごとのパス>)
 ```
-会社ごとのパスは実際にhttps://point.happylth.comにログインして確認してください。
+会社ごとのパスは実際に https://point.happylth.com にログインして確認してください。
 おそらく /web/hogehoge になります。
 
 ### 現在のポイントの確認
